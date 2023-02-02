@@ -24,12 +24,19 @@ export class FacebookMService {
   }
 
   async findAll() {
-
+    let countTele = 0
+    let countFb = 0
 
     const data = await this.fbmModel.find().select('url ip created_at id_fb, type').sort({ created_at: -1 })
 
     // const data = await this._repos.find({ select: ['url', 'ip', 'id_fb', 'created_at'] })
     const response = data.map((e) => {
+
+      if (e.type == 'Telegram') {
+        countTele += 1
+      } else if (e.type == 'Messenger') {
+        countFb += 1
+      }
       return {
         ip: e.ip,
         url: e.url,
@@ -39,6 +46,8 @@ export class FacebookMService {
     })
     return {
       count: response.length,
+      telegram: countTele,
+      message: countFb,
       data: response,
     }
   }
