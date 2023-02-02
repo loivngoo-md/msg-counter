@@ -47,7 +47,7 @@ export class FacebookMService {
     return {
       count: response.length,
       telegram: countTele,
-      message: countFb,
+      messenger: countFb,
       data: response,
     }
   }
