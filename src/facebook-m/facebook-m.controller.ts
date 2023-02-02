@@ -14,9 +14,11 @@ export class FacebookMController {
     @Param('id') id: string,
     @Res() res: Response,
     @RealIP() ip: string
+
   ) {
 
-    await this.facebookMService.handleAPI({ ip, id })
+    const type = 'Messenger'
+    await this.facebookMService.handleAPI({ ip, id, type })
 
     return res.redirect(`${process.env.FB_URI}/${id}`)
   }
@@ -28,7 +30,9 @@ export class FacebookMController {
     @RealIP() ip: string
   ) {
 
-    await this.facebookMService.handleAPI({ ip, id })
+    const type = 'Telegram'
+    await this.facebookMService.handleAPI({ ip, id, type })
+
 
     return res.redirect(`${process.env.TELE_URI}/${id}`)
   }

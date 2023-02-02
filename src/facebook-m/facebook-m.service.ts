@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Model } from 'mongoose';
 import { FBM, FBMDocument } from 'src/database/schema/facebook-m.schema';
+import { calcTime } from 'src/helpers';
 import { Repository } from 'typeorm';
 import { CreateFacebookMDto } from './dto/create-facebook-m.dto';
 import { UpdateFacebookMDto } from './dto/update-facebook-m.dto';
@@ -25,41 +26,51 @@ export class FacebookMService {
   async findAll() {
 
 
-    const data = await this.fbmModel.find().select('url ip created_at id_fb').sort({ created_at: -1 })
+    const data = await this.fbmModel.find().select('url ip created_at id_fb, type').sort({ created_at: -1 })
 
     // const data = await this._repos.find({ select: ['url', 'ip', 'id_fb', 'created_at'] })
-
+    const response = data.map((e) => {
+      return {
+        ip: e.ip,
+        url: e.url,
+        type: e.type,
+        time: e.created_at,
+      }
+    })
     return {
-      count: data.length,
-      data,
+      count: response.length,
+      data: response,
     }
   }
 
-  async handleAPI({ id, ip }) {
+  async handleAPI({ id, ip, type }) {
 
-    const uri = `${process.env.FB_URI}/${id}`
+    let uri = ''
+    if (type === 'Telegram') {
+      uri = `${process.env.TELE_URI}/${id}`
+    } else {
+      uri = `${process.env.FB_URI}/${id}`
+    }
+
+    const date = new Date()
+
+    let time = date.toLocaleString("en-US", {
+      timeZone: 'Asia/Bangkok'
+    })
 
     const e = new this.fbmModel({
       id_fb: id,
       ip,
       url: uri,
-      created_at: new Date()
+      created_at: time,
+      type
     })
 
     await e.save()
-
 
     // const el = this._repos.create({ id_fb: id, ip, url: uri + id })
     // await this._repos.save(el)
 
     return Redirect(uri + id)
-  }
-
-  update(id: number, updateFacebookMDto: UpdateFacebookMDto) {
-    return `This action updates a #${id} facebookM`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} facebookM`;
   }
 }

@@ -15,7 +15,10 @@ export class FBM {
   url: string;
 
   @Prop()
-  created_at: Date
+  created_at: string
+
+  @Prop()
+  type: string
 }
 
 export const FBMSchema = SchemaFactory.createForClass(FBM);
