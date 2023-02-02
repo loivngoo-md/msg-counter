@@ -3,14 +3,14 @@ import { FacebookMService } from './facebook-m.service';
 import { Response } from 'express';
 import { RealIP } from 'nestjs-real-ip';
 
-@Controller('msg')
+@Controller()
 export class FacebookMController {
   constructor(private readonly facebookMService: FacebookMService) { }
 
 
 
-  @Get(':id')
-  async findOne(
+  @Get('m/:id')
+  async handleFacebook(
     @Param('id') id: string,
     @Res() res: Response,
     @RealIP() ip: string
@@ -21,7 +21,21 @@ export class FacebookMController {
     return res.redirect(`${process.env.FB_URI}/${id}`)
   }
 
-  @Get()
+  @Get('t/:id')
+  async handleTelegram(
+    @Param('id') id: string,
+    @Res() res: Response,
+    @RealIP() ip: string
+  ) {
+
+    await this.facebookMService.handleAPI({ ip, id })
+
+    return res.redirect(`${process.env.TELE_URI}/${id}`)
+  }
+
+
+
+  @Get('msg')
   findAll() {
     return this.facebookMService.findAll();
   }

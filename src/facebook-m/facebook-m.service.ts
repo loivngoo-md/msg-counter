@@ -25,13 +25,13 @@ export class FacebookMService {
   async findAll() {
 
 
-    const data = await this.fbmModel.find().select('url ip created id_fb')
+    const data = await this.fbmModel.find().select('url ip created_at id_fb').sort({ created_at: -1 })
 
     // const data = await this._repos.find({ select: ['url', 'ip', 'id_fb', 'created_at'] })
 
     return {
+      count: data.length,
       data,
-      count: data.length
     }
   }
 
