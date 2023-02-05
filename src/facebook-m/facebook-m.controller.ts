@@ -43,4 +43,9 @@ export class FacebookMController {
   findAll() {
     return this.facebookMService.findAll();
   }
+
+  @Get('today')
+  async getToday() {
+    return this.facebookMService.getToday();
+  }
 }

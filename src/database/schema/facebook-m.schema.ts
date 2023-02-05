@@ -19,6 +19,9 @@ export class FBM {
 
   @Prop()
   type: string
+
+  @Prop()
+  date: Date
 }
 
 export const FBMSchema = SchemaFactory.createForClass(FBM);
