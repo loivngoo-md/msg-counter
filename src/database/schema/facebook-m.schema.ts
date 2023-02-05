@@ -1,10 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 
-export type FBMDocument = HydratedDocument<FBM>;
+export type MSGDocument = HydratedDocument<MSG>;
 
 @Schema()
-export class FBM {
+export class MSG {
   @Prop()
   ip: string;
 
@@ -24,4 +24,4 @@ export class FBM {
   date: string
 }
 
-export const FBMSchema = SchemaFactory.createForClass(FBM);
+export const MSGSchema = SchemaFactory.createForClass(MSG);

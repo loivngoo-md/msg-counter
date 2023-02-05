@@ -2,7 +2,7 @@ import { Injectable, Redirect } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Model } from 'mongoose';
-import { FBM, FBMDocument } from 'src/database/schema/facebook-m.schema';
+import { MSG, MSGDocument } from 'src/database/schema/facebook-m.schema';
 import { calcTime, convertDateTimeVNToTimestamp, convertTimestampToDateTime, getVietnamTime } from 'src/helpers';
 import { Repository } from 'typeorm';
 import { CreateFacebookMDto } from './dto/create-facebook-m.dto';
@@ -16,7 +16,7 @@ export class FacebookMService {
     // @InjectRepository(FacebookM)
     // private readonly _repos: Repository<FacebookM>,
 
-    @InjectModel(FBM.name) private fbmModel: Model<FBMDocument>
+    @InjectModel(MSG.name) private MSGModel: Model<MSGDocument>
   ) { }
 
   getVietnamTime() {
@@ -35,7 +35,7 @@ export class FacebookMService {
 
     let now = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`
 
-    const data = await this.fbmModel.find({ date: now });
+    const data = await this.MSGModel.find({ date: now });
 
     const response = data.map((e) => {
 
@@ -49,6 +49,7 @@ export class FacebookMService {
         url: e.url,
         type: e.type,
         time: e.created_at,
+        date: e.date
       }
     })
     return {
@@ -64,7 +65,7 @@ export class FacebookMService {
     let countTele = 0
     let countFb = 0
 
-    const data = await this.fbmModel.find().select('url ip created_at id_fb, type').sort({ created_at: -1 })
+    const data = await this.MSGModel.find().select('url ip created_at id_fb, type').sort({ created_at: -1 })
 
     // const data = await this._repos.find({ select: ['url', 'ip', 'id_fb', 'created_at'] })
     const response = data.map((e) => {
@@ -107,7 +108,7 @@ export class FacebookMService {
     let now = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`
 
 
-    const e = new this.fbmModel({
+    const e = new this.MSGModel({
       id_fb: id,
       ip,
       url: uri,
