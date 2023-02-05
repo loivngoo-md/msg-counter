@@ -106,7 +106,8 @@ export class FacebookMService {
     })
 
     let now = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`
-
+    console.log(now);
+    
 
     const e = new this.MSGModel({
       id_fb: id,
