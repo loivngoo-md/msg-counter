@@ -2,7 +2,7 @@ import { Injectable, Redirect } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Model } from 'mongoose';
-import { MSG, MSGDocument } from 'src/database/schema/facebook-m.schema';
+import { FBM, FBMDocument } from 'src/database/schema/facebook-m.schema';
 import { calcTime, convertDateTimeVNToTimestamp, convertTimestampToDateTime, getVietnamTime } from 'src/helpers';
 import { Repository } from 'typeorm';
 import { CreateFacebookMDto } from './dto/create-facebook-m.dto';
@@ -16,7 +16,7 @@ export class FacebookMService {
     // @InjectRepository(FacebookM)
     // private readonly _repos: Repository<FacebookM>,
 
-    @InjectModel(MSG.name) private MSGModel: Model<MSGDocument>
+    @InjectModel(FBM.name) private FBMModel: Model<FBMDocument>
   ) { }
 
   getVietnamTime() {
@@ -35,7 +35,7 @@ export class FacebookMService {
 
     let now = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`
 
-    const data = await this.MSGModel.find({ date: now });
+    const data = await this.FBMModel.find({ date: now });
 
     const response = data.map((e) => {
 
@@ -65,7 +65,7 @@ export class FacebookMService {
     let countTele = 0
     let countFb = 0
 
-    const data = await this.MSGModel.find().select('url ip created_at id_fb, type').sort({ created_at: -1 })
+    const data = await this.FBMModel.find().select('url ip created_at id_fb, type').sort({ created_at: -1 })
 
     // const data = await this._repos.find({ select: ['url', 'ip', 'id_fb', 'created_at'] })
     const response = data.map((e) => {
@@ -109,7 +109,7 @@ export class FacebookMService {
     console.log(now);
     
 
-    const e = new this.MSGModel({
+    const e = new this.FBMModel({
       id_fb: id,
       ip,
       url: uri,

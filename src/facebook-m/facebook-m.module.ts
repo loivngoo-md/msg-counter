@@ -4,11 +4,11 @@ import { FacebookMController } from './facebook-m.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { FacebookM } from './entities/facebook-m.entity';
 import { MongooseModule } from '@nestjs/mongoose';
-import { MSG, MSGSchema } from 'src/database/schema/facebook-m.schema';
+import { FBM, FBMSchema } from 'src/database/schema/facebook-m.schema';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: MSG.name, schema: MSGSchema }])
+    MongooseModule.forFeature([{ name: FBM.name, schema: FBMSchema }])
   ],
   controllers: [FacebookMController],
   providers: [FacebookMService]
