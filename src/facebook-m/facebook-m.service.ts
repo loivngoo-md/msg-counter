@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Model } from 'mongoose';
 import { FBM, FBMDocument } from 'src/database/schema/facebook-m.schema';
-import { calcTime } from 'src/helpers';
+import { calcTime, convertDateTimeVNToTimestamp, convertTimestampToDateTime, getVietnamTime } from 'src/helpers';
 import { Repository } from 'typeorm';
 import { CreateFacebookMDto } from './dto/create-facebook-m.dto';
 import { UpdateFacebookMDto } from './dto/update-facebook-m.dto';
@@ -19,26 +19,24 @@ export class FacebookMService {
     @InjectModel(FBM.name) private fbmModel: Model<FBMDocument>
   ) { }
 
-  create(createFacebookMDto: CreateFacebookMDto) {
-    return 'This action adds a new facebookM';
+  getVietnamTime() {
+    var today = new Date();
+    var offset = 14; // Vietnam timezone offset
+    var utc = today.getTime() + (today.getTimezoneOffset() * 60000);
+    return new Date(utc + (3600000 * offset));
   }
 
   async getToday() {
+
     let countTele = 0
     let countFb = 0
-    var start = new Date();
-    start.setHours(0, 0, 0, 0);
 
+    const date = new Date()
 
+    let now = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`
 
-    var end = new Date();
-    end.setHours(23, 59, 59, 999);
-    console.log(start, end);
-    
+    const data = await this.fbmModel.find({ date: now });
 
-    const data = await this.fbmModel.find({date: { $gte: start, $lt: end } });
-
-    // const data = await this._repos.find({ select: ['url', 'ip', 'id_fb', 'created_at'] })
     const response = data.map((e) => {
 
       if (e.type == 'Telegram') {
@@ -62,6 +60,7 @@ export class FacebookMService {
   }
 
   async findAll() {
+
     let countTele = 0
     let countFb = 0
 
@@ -102,8 +101,11 @@ export class FacebookMService {
     const date = new Date()
 
     let time = date.toLocaleString("en-US", {
-      timeZone: 'Asia/Bangkok'
+      timeZone: 'Asia/Ho_Chi_Minh'
     })
+
+    let now = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`
+
 
     const e = new this.fbmModel({
       id_fb: id,
@@ -111,14 +113,10 @@ export class FacebookMService {
       url: uri,
       created_at: time,
       type,
-      date: new Date()
+      date: now
     })
 
     await e.save()
-
-    // const el = this._repos.create({ id_fb: id, ip, url: uri + id })
-    // await this._repos.save(el)
-
     return Redirect(uri + id)
   }
 }

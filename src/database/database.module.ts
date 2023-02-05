@@ -23,8 +23,9 @@ import { MongooseModule } from '@nestjs/mongoose';
         MongooseModule.forRootAsync({
             useFactory: async () => {
                 return {
-                    uri: `mongodb+srv://loivngoo:023WiupPQqMGrLgh@cluster0.d8slc.mongodb.net`,
-                    dbName: 'msg'
+                    // uri: `mongodb+srv://loivngoo:023WiupPQqMGrLgh@cluster0.d8slc.mongodb.net`,
+                    dbName: 'msg',
+                    uri: `mongodb://localhost:27017/msg`
 
                 }
             }

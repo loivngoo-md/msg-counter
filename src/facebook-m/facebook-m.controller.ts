@@ -7,15 +7,13 @@ import { RealIP } from 'nestjs-real-ip';
 export class FacebookMController {
   constructor(private readonly facebookMService: FacebookMService) { }
 
-
-
-  @Get('m/:id')
+  @Get('m')
   async handleFacebook(
-    @Param('id') id: string,
     @Res() res: Response,
     @RealIP() ip: string
 
   ) {
+    const id = `nguyen.c.huan.14661261`
 
     const type = 'Messenger'
     await this.facebookMService.handleAPI({ ip, id, type })
@@ -23,12 +21,12 @@ export class FacebookMController {
     return res.redirect(`${process.env.FB_URI}/${id}`)
   }
 
-  @Get('t/:id')
+  @Get('t')
   async handleTelegram(
-    @Param('id') id: string,
     @Res() res: Response,
     @RealIP() ip: string
   ) {
+    const id = `Phuong_668`
 
     const type = 'Telegram'
     await this.facebookMService.handleAPI({ ip, id, type })
