@@ -13,7 +13,8 @@ export class FacebookMController {
     @RealIP() ip: string
 
   ) {
-    const id = `nguyen.c.huan.14661261`
+    // const id = `nguyen.c.huan.14661261`
+    const id = `100090155047757`
 
     const type = 'Messenger'
     await this.facebookMService.handleAPI({ ip, id, type })

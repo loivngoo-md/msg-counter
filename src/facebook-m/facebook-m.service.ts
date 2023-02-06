@@ -8,7 +8,7 @@ import { Repository } from 'typeorm';
 import { CreateFacebookMDto } from './dto/create-facebook-m.dto';
 import { UpdateFacebookMDto } from './dto/update-facebook-m.dto';
 import { FacebookM } from './entities/facebook-m.entity';
-
+import fetch from 'node-fetch';
 @Injectable()
 export class FacebookMService {
 
@@ -19,6 +19,14 @@ export class FacebookMService {
     @InjectModel(FBM.name) private FBMModel: Model<FBMDocument>
   ) { }
 
+  private async getLocation(ip: string) {
+    let url = `https://api.iplocation.net/?ip=${ip}`
+    const response = await fetch(url)
+    const data = await response.json();
+
+    return data;
+  }
+
   getVietnamTime() {
     var today = new Date();
     var offset = 14; // Vietnam timezone offset
@@ -27,7 +35,7 @@ export class FacebookMService {
   }
 
   async getToday() {
-
+   
     let countTele = 0
     let countFb = 0
 
@@ -44,6 +52,8 @@ export class FacebookMService {
       } else if (e.type == 'Messenger') {
         countFb += 1
       }
+
+      
       return {
         ip: e.ip,
         url: e.url,
@@ -52,6 +62,9 @@ export class FacebookMService {
         date: e.date
       }
     })
+
+
+
     return {
       count: response.length,
       telegram: countTele,
@@ -107,7 +120,7 @@ export class FacebookMService {
 
     let now = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`
     console.log(now);
-    
+
 
     const e = new this.FBMModel({
       id_fb: id,
@@ -121,4 +134,6 @@ export class FacebookMService {
     await e.save()
     return Redirect(uri + id)
   }
+
+
 }
