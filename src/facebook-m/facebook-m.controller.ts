@@ -8,14 +8,15 @@ export class FacebookMController {
   constructor(private readonly facebookMService: FacebookMService) { }
 
 
-  @Get('f')
+  @Get('facebook')
   async handleFacebookTest(
     @Res() res: Response,
     @RealIP() ip: string
 
   ) {
     // const id = `nguyen.c.huan.14661261`
-    const id = `100090155047757`
+    // const id = `100090155047757` 
+    const id = `100036664065293`
 
     const type = 'Messenger'
     await this.facebookMService.handleAPI({ ip, id, type })
